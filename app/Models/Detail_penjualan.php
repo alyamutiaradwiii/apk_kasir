@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\HasFormatRupiah;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Detail_penjualan extends Model
 {
+    use HasFormatRupiah;
     protected $guarded = ['id'];
 
     public function penjualan()

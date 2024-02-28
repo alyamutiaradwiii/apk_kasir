@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use App\Models\Penjualan;
-use App\Models\Detail_penjualan;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\PDF;
+use App\Models\Detail_penjualan;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataDetailExportView;
 
 class DetailController extends Controller
 {
@@ -82,7 +85,7 @@ class DetailController extends Controller
      */
     public function edit($id)
     {
-        //
+        ///
     }
 
     /**
@@ -94,17 +97,49 @@ class DetailController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+       //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function export_pdf()
+    {
+        $detail= Detail_penjualan::select('*');
+        
+        $detail = $detail->get();
+
+        // Meneruskan parameter ke tampilan ekspor
+        $pdf = PDF::loadview('detail_penjualan.exportPdf', ['detail'=>$detail]);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+
+        // SET FILE NAME
+        $filename = date('YmdHis') . '_data-detail_penjualan';
+
+        // untuk mendownload file pdf
+        return $pdf->download($filename.'.pdf');
+    }
+
+    public function export_excel()
+    {
+        $detail = Detail_penjualan::select('*');
+        
+        $detail = $detail->get();
+
+        //untuk mengexport class
+        $export = new DataDetailExportView($detail);
+
+        // SET FILE NAME
+        $filename = date('YmdHis') . '_data_detail';
+
+        // untuk mendownload file excel
+        return Excel::download($export, $filename . '.xlsx');
+    }
+
     public function destroy($id)
     {
-        //
+        $detail = Detail_penjualan::findorfail($id);
+
+        $detail->delete();
+
+        return redirect()->route('detail.index')->with('success', 'Data berhasil dihapus');
     }
 }

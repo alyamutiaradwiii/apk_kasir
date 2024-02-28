@@ -20,9 +20,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="main-content-label mg-b-5">
-                    Left Label Alignment
+                    From Create Produk
                 </div>
-                <p class="mg-b-20">It is Very Easy to Customize and it uses in your website apllication.</p>
+                @include('_component.message')
                 <div class="pd-30 pd-sm-40 bg-gray-100">
                     <form action="{{ route('produk.store') }}" method="POST">
                         @csrf

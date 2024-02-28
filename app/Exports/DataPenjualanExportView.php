@@ -3,15 +3,37 @@
 namespace App\Exports;
 
 use App\Models\Penjualan;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 
-class DataPenjualanExportView implements FromCollection
+class DataPenjualanExportView implements FromView, WithEvents
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
-    {
-        return Penjualan::all();
-    }
+    protected $data;
+
+public function __construct($data)
+{
+    $this->data = $data;
+}
+
+public function view(): View
+{
+    return view('data_penjualan.exportExcel', [
+        'data' => $this->data
+    ]);
+}
+
+public function registerEvents(): array
+{
+    return[
+        AfterSheet::class => function (AfterSheet $event) {
+            //Auto-width each column
+            foreach ($event->sheet->getColumnIterator() as $column){
+                $column = $column->getColumnIndex();
+                $event->sheet->getColumnDimension($column)->setAutoSize(true);
+            }
+        },
+    ];
+}
 }

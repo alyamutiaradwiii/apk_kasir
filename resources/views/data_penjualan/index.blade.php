@@ -1,4 +1,5 @@
 @extends('template.layout')
+<title>Penjualan</title>
 @section('content')
 
 <div class="main-container container-fluid">
@@ -8,7 +9,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a   href="javascript:void(0);">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Project</li>
+                <li class="breadcrumb-item active" aria-current="page">Penjualan</li>
             </ol>
         </nav>
     </div>
@@ -19,15 +20,15 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Data Pelanggan</h3>
+                <h3 class="card-title">Data Penjualan</h3>
                 <div  class="d-flex my-auto btn-list justify-content-end">
                     <a href="{{ route('penjualan.create') }}" class="btn btn-info"><i class="fa fa-plus"></i> Tambah</a>
-                    <a href="{{ route('export_pdf_pelanggan') }}" class="btn btn-danger"><i class="fe fe-upload"></i> export PDF</a>
-                    <a href="{{ route('export_excel_pelanggan') }}" class="btn btn-success"><i class="fa fa-plus"></i> Export Excel</a>
-                    <a class="modal-effect btn btn-dark" data-bs-effect="effect-rotate-bottom" data-bs-toggle="modal" href="#modaldemo8"><i class="fe fe-download"></i> Import Excel</a>		
+                    <a href="{{ route('export_pdf_penjualan') }}" class="btn btn-danger"><i class="fe fe-upload"></i> export PDF</a>
+                    <a href="{{ route('export_excel_penjualan') }}" class="btn btn-success"><i class="fa fa-plus"></i> Export Excel</a>
                 </div>
             </div>
             <div class="card-body">
+                @include('_component.message')
                 <div class="table-responsive">
                     <table class="table border-top-0 table-bordered text-nowrap border-bottom" id="basic-datatable">
                         <thead>
@@ -44,7 +45,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $pl->tanggal_penjualan }}</td>
-                                <td>{{ $pl->Total_harga }}</td>
+                                <td>{{ $pl->formatRupiah('Total_harga') }}</td>
                                 <td>{{ $pl->pelanggan->nama_pelanggan }}</td>
                                 <td>
                                     <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('penjualan.destroy', $pl->id)}}" method="POST">

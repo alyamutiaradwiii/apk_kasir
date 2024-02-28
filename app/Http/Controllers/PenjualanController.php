@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Pelanggan;
 use App\Models\Penjualan;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\PDF;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DataPenjualanExportView;
+use App\Imports\ImportDataPenjualanClass;
 
 class PenjualanController extends Controller
 {
@@ -78,9 +83,8 @@ class PenjualanController extends Controller
      */
     public function edit($id)
     {
-        $pelanggan  =  Pelanggan::all();
-        $dt = Penjualan::find($id);
-        return view('data_penjualan.edit', compact('pelanggan','dt'));
+        $penjualan = Penjualan::findorfail($id);
+        return view('data_penjualan.edit', compact('penjualan'));
     }
 
     /**
@@ -108,11 +112,47 @@ class PenjualanController extends Controller
             'Total_harga' => $request->Total_harga,
             'pelanggan_id' => $request->pelanggan_id,
         ];
-        Penjualan::where('id',$id)->update($penjualan);
-        return redirect()->route('penjualan.index')->with('success','Data Berhasil Di edit');
+        $penjualan = Penjualan::findorfail($id);
+        $penjualan->update($request->all());
+
+        return redirect()->route('penjualan.index')->with('success', 'Data berhasil diupdate');
 
     }
 
+    public function export_pdf()
+    {
+        $penjualan = Penjualan::select('*');
+        
+        $penjualan = $penjualan->get();
+
+        // Meneruskan parameter ke tampilan ekspor
+        $pdf = PDF::loadview('data_penjualan.exportPdf', ['penjualan'=>$penjualan]);
+        $pdf->setPaper('a4', 'portrait');
+        $pdf->setOption(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+
+        // SET FILE NAME
+        $filename = date('YmdHis') . '_data-penjualan';
+
+        // untuk mendownload file pdf
+        return $pdf->download($filename.'.pdf');
+    }
+    public function export_excel()
+    {
+        $penjualan = Penjualan::select('*');
+        
+        $penjualan = $penjualan->get();
+
+        //untuk mengexport class
+        $export = new DataPenjualanExportView($penjualan);
+
+        // SET FILE NAME
+        $filename = date('YmdHis') . '_data_penjualan';
+
+        // untuk mendownload file excel
+        return Excel::download($export, $filename . '.xlsx');
+    }
+
+    
     /**
      * Remove the specified resource from storage.
      *

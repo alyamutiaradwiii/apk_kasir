@@ -1,4 +1,5 @@
 @extends('template.layout')
+<title>Produk</title>
 @section('content')
 
 <div class="main-container container-fluid">
@@ -8,7 +9,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a   href="javascript:void(0);">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Project</li>
+                <li class="breadcrumb-item active" aria-current="page">Produk</li>
             </ol>
         </nav>
     </div>
@@ -22,12 +23,13 @@
                 <h3 class="card-title">Data Pelanggan</h3>
                 <div  class="d-flex my-auto btn-list justify-content-end">
                     <a href="{{ route('produk.create') }}" class="btn btn-info"><i class="fa fa-plus"></i> Tambah</a>
-                    <a href="" class="btn btn-danger"><i class="fe fe-upload"></i> export PDF</a>
-                    <a href="" class="btn btn-success"><i class="fa fa-plus"></i> Export Excel</a>
+                    <a href="{{ route('export_pdf_produk') }}" class="btn btn-danger"><i class="fe fe-upload"></i> export PDF</a>
+                    <a href="{{ route('export_excel_produk') }}" class="btn btn-success"><i class="fa fa-plus"></i> Export Excel</a>
                     <a class="modal-effect btn btn-dark" data-bs-effect="effect-rotate-bottom" data-bs-toggle="modal" href="#modaldemo8"><i class="fe fe-download"></i> Import Excel</a>		
                 </div>
             </div>
             <div class="card-body">
+                @include('_component.message')
                 <div class="table-responsive">
                     <table class="table border-top-0 table-bordered text-nowrap border-bottom" id="basic-datatable">
                         <thead>
@@ -44,7 +46,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $pr->nama_produk }}</td>
-                                <td>{{ $pr->harga }}</td>
+                                <td>{{ $pr->formatRupiah('harga') }}</td>
                                 <td>{{ $pr->stok }}</td>
                                 <td>
                                     <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('produk.destroy', $pr->id)}}" method="POST">
@@ -63,5 +65,5 @@
         </div>
     </div>
 </div>
-
+@include('data_produk.modal_import')
 @endsection

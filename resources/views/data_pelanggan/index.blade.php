@@ -1,4 +1,5 @@
 @extends('template.layout')
+<title>Pelanggan</title>
 @section('content')
 
 <div class="main-container container-fluid">
@@ -8,7 +9,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a   href="javascript:void(0);">Dashboard</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Project</li>
+                <li class="breadcrumb-item active" aria-current="page">Pelanggan</li>
             </ol>
         </nav>
     </div>
@@ -28,6 +29,7 @@
                 </div>
             </div>
             <div class="card-body">
+                @include('_component.message')
                 <div class="table-responsive">
                     <table class="table border-top-0 table-bordered text-nowrap border-bottom" id="basic-datatable">
                         <thead>

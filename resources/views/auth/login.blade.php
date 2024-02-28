@@ -8,7 +8,7 @@
         <div class="wd-md-50p login d-none d-md-block page-signin-style p-5 text-white" >
             <div class="my-auto authentication-pages">
                 <div>
-                    <img src="{{ asset('') }}assets/img/brand/logo-white.png">
+                    <img src="{{ asset('') }}../assets/img/brand/buku.png">
                     <h5 class="mb-4">Harap Login terlebih dahulu untuk masuk ke Aplikasi</h5>
                     <p class="mb-5">Selamat Datang!!</p>
                 </div>
@@ -29,7 +29,6 @@
                 </form>
             </div>
             <div class="main-signin-footer mt-3 mg-t-5">
-                <p><a href="">Forgot password?</a></p>
                 <p>Don't have an account? <a href="{{ route('register') }}">Register</a></p>
             </div>
         </div>
